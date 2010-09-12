@@ -12,7 +12,10 @@ class database:
 			raise Error('No config file found.  Writing defaults to'+file)
 	def read(self,domain=None,key=None):
 		if domain is None:
-			return self.__config.sections()
+			hash = {}
+			for domain in self.domains():
+				hash[domain] = self.read(domain)
+			return hash
 		
 		# Domain Only
 		if not self.__config.has_section(domain):
