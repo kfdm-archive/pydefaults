@@ -49,5 +49,7 @@ class defaults:
 		self.__config.write(open(self.__file,'w'))
 	def rename(self,domain,old_key,new_key):
 		if self.__debug: print >> sys.stderr, 'Renaming %s %s %s'%(domain,old_key,new_key)
-		raise Error('Not yet implemented')
+		value = self.read(domain, old_key)
+		self.write(domain, new_key, value)
+		self.delete(domain, old_key)
 

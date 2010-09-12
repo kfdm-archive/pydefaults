@@ -49,3 +49,8 @@ test('Writing Invalid Key','write "<domain>" "<key>" "<value>"',0)
 test('Reading Invalid Key','read "<domain>" "<key>"',256)
 test('Clear test domain','delete "<domain>"',0)
 
+setup('Rename')
+test('Writing Old Key','write "<domain>" "old_key" "<value>"',0)
+test('Renaming Key','rename "<domain>" "old_key" new_key',0)
+test('Reading New Key','read "<domain>" new_key',0)
+test('Reading Old Key','read "<domain>" old_key',256)
