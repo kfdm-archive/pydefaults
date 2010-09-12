@@ -4,6 +4,7 @@ OSX defaults inspired system
 See http://developer.apple.com/library/mac/#documentation/Darwin/Reference/ManPages/man1/defaults.1.html
 '''
 import os
+import sys
 from optparse import OptionParser
 from pydefaults import database,Error
 
@@ -33,8 +34,8 @@ class Client(OptionParser):
 	def parse_args(self, args=None, values=None):
 		opts, args = OptionParser.parse_args(self, args, values)
 		if opts.debug:
-			print opts
-			print args
+			print >> sys.stderr, 'Options:',opts
+			print >> sys.stderr, 'Args:',args
 		if opts.edit:
 			if os.environ['EDITOR']:
 				os.system('%s %s'%(os.environ['EDITOR'],opts.file))
@@ -64,7 +65,7 @@ class Client(OptionParser):
 			return self.error('Invalid Arguments')
 		try:
 			if opts.debug:
-				print func,args
+				print >> sys.stderr, func,args
 			print func(*args)
 		except Error,e:
 			if not opts.debug:
