@@ -36,6 +36,7 @@ def test(title,cmd,chk):
 		exit(txt)
 
 setup('Standard Test')
+test('List domains','domains',0)
 test('Clear test domain','delete "<domain>"',0)
 test('Reading missing domain','read "<domain>"',256)
 test('Reading missing key','read "<domain>" "<key>"',256)

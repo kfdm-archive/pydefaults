@@ -4,7 +4,6 @@ from ConfigParser import ConfigParser,NoOptionError,NoSectionError,Error
 
 class defaults:
 	__debug = False
-	__editor = False
 	__file = None
 	__config = None
 	def __init__(self,file):
@@ -52,4 +51,6 @@ class defaults:
 		value = self.read(domain, old_key)
 		self.write(domain, new_key, value)
 		self.delete(domain, old_key)
-
+	def domains(self):
+		if self.__debug: print >> sys.stderr, 'Listing domains'
+		return self.__config.sections()

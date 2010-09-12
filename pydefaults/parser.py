@@ -15,6 +15,8 @@ class ClientParser(OptionParser):
 	
 	delete <domain>
 	delete <domain> <key>
+	
+	domains
 '''
 		OptionParser.__init__(self,usage=usage)
 		self.add_option("-f","--file",help="Filename",
@@ -36,11 +38,14 @@ class ClientParser(OptionParser):
 			exit(self.print_help())
 		
 		db = defaults(opts.file)
+		if opts.debug:
+			db._defaults__debug = True
 		cmds = {
 			'read':(db.read,0,2),
 			'write':(db.write,3,3),
 			'rename':(db.rename,3,3),
 			'delete':(db.delete,1,2),
+			'domains':(db.domains,0,0),
 		}
 		if not cmds.has_key(args[0]):
 			self.error('Unknown command %s'%args[0])
@@ -49,7 +54,7 @@ class ClientParser(OptionParser):
 		if len(args) < min or len(args) > max:
 			return self.error('Invalid Arguments')
 		try:
-			func(*args)
+			print func(*args)
 		except Error,e:
 			if not opts.debug:
 				exit(e)
