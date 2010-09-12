@@ -19,7 +19,7 @@ def test(title,cmd,chk):
 	cmd = cmd.replace('<domain>',domain)
 	cmd = cmd.replace('<key>',key)
 	cmd = cmd.replace('<value>',value)
-	cmd = 'python pydefaults/parser.py %s --debug'%cmd
+	cmd = 'export PYTHONPATH="." ; python scripts/pydefaults %s --debug'%cmd
 	pipe = os.popen('{ ' + cmd + '; } 2>&1', 'r')
 	txt = pipe.read()
 	sts = pipe.close()
