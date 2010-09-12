@@ -7,7 +7,7 @@ class defaults:
 	__editor = False
 	__file = None
 	__config = None
-	def __init__(self,file='~/.defaults'):
+	def __init__(self,file):
 		self.__file = os.path.expanduser(file)
 		self.__config = ConfigParser()
 		try: self.__config.readfp(open(self.__file))

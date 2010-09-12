@@ -17,8 +17,8 @@ class ClientParser(OptionParser):
 	delete <domain> <key>
 '''
 		OptionParser.__init__(self,usage=usage)
-		self.add_option("-H","--host",help="Hostname",
-						dest='host',default='~/.defaults')
+		self.add_option("-f","--file",help="Filename",
+						dest='file',default='~/.pydefaults')
 		self.add_option("-e","--edit",help="Open file in editor",
 						dest='edit',action="store_true",default=False)
 		self.add_option("-d","--debug",help="Extra debug information",
@@ -30,54 +30,30 @@ class ClientParser(OptionParser):
 			print args
 		if opts.edit:
 			if os.environ['EDITOR']:
-				os.system('%s %s'%(os.environ['EDITOR'],opts.host))
+				os.system('%s %s'%(os.environ['EDITOR'],opts.file))
 			exit()
-		if len(args) < 1: exit(self.print_help())
-		values = defaults(opts.host)
-		if args[0] not in ['read','write','rename','delete']:
+		if len(args) < 1:
+			exit(self.print_help())
+		
+		db = defaults(opts.file)
+		cmds = {
+			'read':(db.read,0,2),
+			'write':(db.write,3,3),
+			'rename':(db.rename,3,3),
+			'delete':(db.delete,1,2),
+		}
+		if not cmds.has_key(args[0]):
 			self.error('Unknown command %s'%args[0])
-		if args[0] == 'read':
-			try:
-				if len(args) == 1:
-					print values.read()
-				elif len(args) == 2:
-					print values.read(args[1])
-				elif len(args) == 3:
-					print values.read(args[1],args[2])
-				else:
-					self.error('Invalid Arguments')
-			except Error,e:
-				if not opts.debug: exit(e)
-				raise e
-		if args[0] == 'write':
-			try:
-				if len(args) == 4:
-					print values.write(args[1],args[2],args[3])
-				else:
-					self.error('Invalid Arguments')
-			except Error,e:
-				if not opts.debug: exit(e)
-				raise e
-		if args[0] == 'rename':
-			try:
-				if len(args) == 4:
-					print values.rename(args[1],args[2],args[3])
-				else:
-					self.error('Invalid Arguments')
-			except Error,e:
-				if not opts.debug: exit(e)
-				raise e
-		if args[0] == 'delete':
-			try:
-				if len(args) == 2:
-					print values.delete(args[1])
-				elif len(args) == 3:
-					print values.delete(args[1],args[2])
-				else:
-					self.error('Invalid Arguments')
-			except Error,e:
-				if not opts.debug: exit(e)
-				raise e
+		func,min,max = cmds.get(args[0])
+		args = args[1:] # Pop off the command
+		if len(args) < min or len(args) > max:
+			return self.error('Invalid Arguments')
+		try:
+			func(*args)
+		except Error,e:
+			if not opts.debug:
+				exit(e)
+			raise e
 			
 if __name__ == '__main__':
 	ClientParser().parse_args()
