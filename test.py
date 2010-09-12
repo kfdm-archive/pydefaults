@@ -16,9 +16,9 @@ def setup(title,d='tdomain',k='tkey',v='tvalue'):
 	print '-'*50
 def test(title,cmd,chk):
 	global domain,key,value
-	cmd = cmd.replace('domain',domain)
-	cmd = cmd.replace('key',key)
-	cmd = cmd.replace('value',value)
+	cmd = cmd.replace('<domain>',domain)
+	cmd = cmd.replace('<key>',key)
+	cmd = cmd.replace('<value>',value)
 	cmd = 'python pydefaults/parser.py %s --debug'%cmd
 	pipe = os.popen('{ ' + cmd + '; } 2>&1', 'r')
 	txt = pipe.read()
@@ -36,15 +36,16 @@ def test(title,cmd,chk):
 		exit(txt)
 
 setup('Standard Test')
-test('Clear test domain','delete "domain"',0)
-test('Reading missing domain','read "domain"',256)
-test('Reading missing key','read "domain" "key"',256)
-test('Writing Key','write "domain" "key" "value"',0)
-test('Reading domain','read "domain"',0)
-test('Reading key','read "domain" "key"',0)
-test('Clear test key','delete "domain" "key"',0)
+test('Clear test domain','delete "<domain>"',0)
+test('Reading missing domain','read "<domain>"',256)
+test('Reading missing key','read "<domain>" "<key>"',256)
+test('Writing Key','write "<domain>" "<key>" "<value>"',0)
+test('Reading domain','read "<domain>"',0)
+test('Reading key','read "<domain>" "<key>"',0)
+test('Clear test key','delete "<domain>" "<key>"',0)
 
 setup('Invalid Key',k='key = key')
-test('Writing Invalid Key','write "domain" "key" "value"',0)
-test('Reading Invalid Key','read "domain" "key"',256)
-test('Clear test domain','delete "domain"',0)
+test('Writing Invalid Key','write "<domain>" "<key>" "<value>"',0)
+test('Reading Invalid Key','read "<domain>" "<key>"',256)
+test('Clear test domain','delete "<domain>"',0)
+
