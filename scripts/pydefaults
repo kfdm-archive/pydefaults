@@ -51,22 +51,24 @@ class Client(OptionParser):
 				exit(e)
 			raise e
 		cmds = {
-			'read':(db.read,0,2),
-			'write':(db.write,3,3),
-			'rename':(db.rename,3,3),
-			'delete':(db.delete,1,2),
-			'domains':(db.domains,0,0),
+			'read':db.read,
+			'write':db.write,
+			'rename':db.rename,
+			'delete':db.delete,
+			'domains':db.domains,
 		}
 		if not cmds.has_key(args[0]):
 			self.error('Unknown command %s'%args[0])
-		func,min,max = cmds.get(args[0])
+		func = cmds.get(args[0])
 		args = args[1:] # Pop off the command
-		if len(args) < min or len(args) > max:
-			return self.error('Invalid Arguments')
 		try:
 			if opts.debug:
 				print >> sys.stderr, func,args
 			print func(*args)
+		except TypeError,e:
+			if not opts.debug:
+				return self.error('Invalid Arguments')
+			raise e
 		except Error,e:
 			if not opts.debug:
 				exit(e)
