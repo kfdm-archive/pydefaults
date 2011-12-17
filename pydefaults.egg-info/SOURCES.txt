@@ -1,0 +1,11 @@
+README
+setup.py
+pydefaults/__init__.py
+pydefaults/ini.py
+pydefaults/osx.py
+pydefaults/plist.py
+pydefaults.egg-info/PKG-INFO
+pydefaults.egg-info/SOURCES.txt
+pydefaults.egg-info/dependency_links.txt
+pydefaults.egg-info/top_level.txt
+scripts/pydefaults
